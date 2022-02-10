@@ -72,14 +72,14 @@
       .columns.small-12.fat
         %div{"ng-if" => "::producer.name"}
           %label
-            = t :producers_buy_at_html, {enterprise: '<span class="turquoise" ng-bind="::producer.name"></span>'.html_safe}
+            = t :producers_buy_at_html, enterprise: '<span class="turquoise" ng-bind="::producer.name"></span>'.html_safe
         %div.show-for-medium-up{"ng-if" => "::!producer.name"}
           &nbsp;
     .row.cta-container
       .columns.small-12
         %a.cta-hub{"ng-repeat" => "hub in producer.hubs | orderBy:'-active'",
         "ng-href" => "{{::hub.path}}", "ng-attr-target" => "{{ embedded_layout ? '_blank' : undefined }}",
-        "ng-class" => "::{primary: hub.active, secondary: !hub.active}"}
+        "ng-class" => "::{primary: hub.active, secondary: !hub.active}", "ofn-change-hub" => "hub"}
           %i.ofn-i_068-shop-reversed{"ng-if" => "::hub.active"}
           %i.ofn-i_068-shop-reversed{"ng-if" => "::!hub.active"}
           .hub-name{"ng-bind" => "::hub.name"}

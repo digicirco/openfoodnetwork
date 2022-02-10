@@ -101,12 +101,7 @@ module Spree
       end
 
       def load_data
-        @providers = if Rails.env.dev? || Rails.env.test?
-                       Gateway.providers.sort_by(&:name)
-                     else
-                       Gateway.providers.reject{ |p| p.name.include? "Bogus" }.sort_by(&:name)
-                     end
-        @providers.reject!{ |provider| stripe_provider?(provider) } unless show_stripe?
+        @providers = load_providers
         @calculators = PaymentMethod.calculators.sort_by(&:name)
       end
 
@@ -124,6 +119,20 @@ module Spree
           [(@payment_method.has_distributor? d) ? 0 : 1, d.name]
         end
         # rubocop:enable Style/TernaryParentheses
+      end
+
+      def load_providers
+        providers = Gateway.providers.sort_by(&:name)
+
+        unless Rails.env.development? || Rails.env.test?
+          providers.reject! { |provider| provider.name.include? "Bogus" }
+        end
+
+        unless show_stripe?
+          providers.reject! { |provider| stripe_provider?(provider) }
+        end
+
+        providers
       end
 
       # Show Stripe as an option if enabled, or if the
@@ -145,12 +154,11 @@ module Spree
       end
 
       def stripe_payment_method?
-        ["Spree::Gateway::StripeConnect",
-         "Spree::Gateway::StripeSCA"].include? @payment_method.try(:type)
+        @payment_method.try(:type) == "Spree::Gateway::StripeSCA"
       end
 
       def stripe_provider?(provider)
-        provider.name.ends_with?("StripeConnect", "StripeSCA")
+        provider.name.ends_with?("StripeSCA")
       end
 
       def base_params
@@ -162,7 +170,7 @@ module Spree
         raw_params[ActiveModel::Naming.param_key(@payment_method)] || {}
       end
 
-      # Merge payment method params with gateway params like :gateway_stripe_connect
+      # Merge payment method params with gateway params like :gateway_stripe_sca
       # Also, remove password if present and blank
       def update_params
         @update_params ||= begin

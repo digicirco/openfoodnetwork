@@ -1,5 +1,5 @@
-%li#login-link
-  %a{"auth" => "login"}
-    %img{ src: image_path("menu/icn-login.svg") }
+%li#login-link{ "data-controller": "login-modal" }
+  %a{"auth": "login", "data-action": "click->login-modal#call" }
+    %img{ src: image_pack_path("menu/icn-login.svg") }
     %span
       = t 'label_login'

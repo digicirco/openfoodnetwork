@@ -5,7 +5,7 @@ require 'system_helper'
 describe '
   As an Administrator
   I want to be able to manage orders in bulk
-', js: true do
+' do
   include AdminHelper
   include AuthenticationHelper
   include WebHelper
@@ -418,7 +418,7 @@ describe '
           expect(page).to have_select2 'order_cycle_filter',
                                        with_options: OrderCycle.pluck(:name).unshift("All")
           select2_select oc1.name, from: "order_cycle_filter"
-          expect(page).to have_no_selector "#loading img.spinner"
+          expect(page).to have_no_selector "#loading i"
           expect(page).to have_selector "tr#li_#{li1.id}"
           expect(page).to have_no_selector "tr#li_#{li2.id}"
         end

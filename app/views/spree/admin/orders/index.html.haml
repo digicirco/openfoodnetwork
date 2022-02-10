@@ -41,7 +41,7 @@
             %span{'ng-show' => "sorting == 'completed_at asc'"}= "&#x25B2;".html_safe
             %span{'ng-show' => "sorting == 'completed_at desc' || sorting === undefined"}= "&#x25BC;".html_safe
 
-      - ['number', 'state', 'payment_state', 'shipment_state', 'email', 'total'].each do |column_name|
+      - ['number', 'state', 'payment_state', 'shipment_state', 'email', 'bill_address_lastname', 'total'].each do |column_name|
         %th
           = render partial: 'spree/admin/shared/sortable_header', locals: {column_name: column_name}
 
@@ -76,7 +76,7 @@
       %td
         %a{ ng: { href: "mailto:{{order.email}}" } }
           {{order.email}}
-        %br
+      %td
         {{order.full_name}}
       %td.align-center
         %span{'ng-bind-html' => 'order.display_total'}
@@ -92,13 +92,10 @@
         %div{'ng-if' => 'order.ready_to_capture'}
           %button.icon-capture.icon_link.no-text{'ng-click' => 'capturePayment(order)', rel: 'nofollow', 'ofn-with-tip' => t('.capture')}
 
-.orders-loading{'ng-show' => 'RequestMonitor.loading'}
-  .row
-    .small-12.columns.fullwidth.text-center
-      = render partial: "components/spinner"
-  .row
-    .small-12.columns.fullwidth.text-center
-      %span= t('.loading')
+.sixteen.columns.alpha#loading{ 'ng-show' => 'RequestMonitor.loading' }
+  = render partial: "components/admin_spinner"
+  %h1
+    = t('.loading')
 
 %div{'ng-show' => "!RequestMonitor.loading && orders.length > 0" }
   = render partial: 'admin/shared/angular_pagination'

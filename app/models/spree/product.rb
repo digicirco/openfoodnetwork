@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require 'open_food_network/permalink_generator'
 require 'open_food_network/property_merge'
 require 'concerns/product_stock'
 
@@ -237,7 +236,7 @@ module Spree
     end
 
     def to_param
-      permalink.present? ? permalink : (permalink_was || name.to_s.to_url)
+      permalink.present? ? permalink : (permalink_was || UrlGenerator.to_url(name))
     end
 
     # the master variant is not a member of the variants array
@@ -431,7 +430,7 @@ module Spree
     end
 
     def update_units
-      return unless saved_change_to_variant_unit?
+      return unless saved_change_to_variant_unit? || saved_change_to_variant_unit_name?
 
       option_types.delete self.class.all_variant_unit_option_types
       option_types << variant_unit_option_type if variant_unit.present?

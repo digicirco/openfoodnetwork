@@ -1,19 +1,19 @@
 # frozen_string_literal: true
 
 source 'https://rubygems.org'
-ruby "2.7.3"
+ruby "3.0.3"
 git_source(:github) { |repo_name| "https://github.com/#{repo_name}.git" }
 
 gem 'dotenv-rails', require: 'dotenv/rails-now' # Load ENV vars before other gems
 
-gem 'rails', '~> 6.1.4'
+gem 'rails', '>= 6.1.4'
 
 gem 'activemerchant', '>= 1.78.0'
+gem 'rexml'
 gem 'angular-rails-templates', '>= 0.3.0'
 gem 'awesome_nested_set'
 gem 'ransack', '2.4.2'
 gem 'responders'
-gem 'sass-rails', '< 5.1.0' # this restriction originates from the compass-rails's version
 gem 'webpacker', '~> 5'
 
 gem 'i18n'
@@ -38,13 +38,14 @@ gem "pg", "~> 1.2.3"
 
 gem 'acts_as_list', '1.0.4'
 gem 'cancancan', '~> 1.15.0'
+gem 'digest'
 gem 'ffaker'
 gem 'highline', '2.0.3' # Necessary for the install generator
 gem 'json'
 gem 'monetize', '~> 1.11'
 gem 'paranoia', '~> 2.4'
 gem 'state_machines-activerecord'
-gem 'stringex', '~> 2.8.5'
+gem 'stringex', '~> 2.8.5', require: false
 
 gem 'paypal-sdk-merchant', '1.117.2'
 gem 'stripe'
@@ -57,6 +58,9 @@ gem 'jwt', '~> 2.3'
 gem 'oauth2', '~> 1.4.7' # Used for Stripe Connect
 
 gem 'pagy', '~> 5.1'
+
+gem 'rswag-api'
+gem 'rswag-ui'
 
 gem 'angularjs-rails', '1.8.0'
 gem 'aws-sdk', '1.67.0'
@@ -73,7 +77,6 @@ gem 'acts-as-taggable-on', '~> 8.1'
 gem 'angularjs-file-upload-rails', '~> 2.4.1'
 gem 'bigdecimal', '3.0.2'
 gem 'bootsnap', require: false
-gem 'custom_error_message', github: 'jeremydurham/custom-err-msg'
 gem 'geocoder'
 gem 'gmaps4rails'
 gem 'mimemagic', '> 0.3.5'
@@ -89,14 +92,14 @@ gem 'redis', '>= 4.0', require: ['redis', 'redis/connection/hiredis']
 gem 'sidekiq'
 gem 'sidekiq-scheduler'
 
-gem "cable_ready", "5.0.0.pre2"
+gem "cable_ready", "5.0.0.pre3"
 
 gem 'combine_pdf'
 gem 'wicked_pdf'
 gem 'wkhtmltopdf-binary'
 
 gem 'immigrant'
-gem 'roo', '~> 2.8.3'
+gem 'roo', github: "roo-rb/roo" # master is currently needed for Ruby 3.x (awaiting new release)
 gem 'spreadsheet_architect'
 
 gem 'whenever', require: false
@@ -104,16 +107,12 @@ gem 'whenever', require: false
 gem 'test-unit', '~> 3.5'
 
 gem 'coffee-rails', '~> 5.0.0'
-gem 'compass-rails'
 
 gem 'mini_racer', '0.4.0'
 
 gem 'uglifier', '>= 1.0.3'
 
 gem 'angular_rails_csrf'
-gem 'foundation-icons-sass-rails'
-
-gem 'foundation-rails', '= 5.5.2.1'
 
 gem 'jquery-rails', '4.4.0'
 gem 'jquery-ui-rails', '~> 4.2'
@@ -149,7 +148,7 @@ group :test, :development do
   gem 'letter_opener', '>= 1.4.1'
   gem 'rspec-rails', ">= 3.5.2"
   gem 'rspec-retry'
-  gem 'rswag'
+  gem 'rswag-specs'
   gem 'selenium-webdriver'
   gem 'shoulda-matchers'
   gem 'timecop'

@@ -13,14 +13,13 @@ module CheckoutCallbacks
     prepend_before_action :require_order_cycle
     prepend_before_action :require_distributor_chosen
 
-    before_action :load_order, :associate_user, :load_saved_addresses
-    before_action :load_shipping_methods, :load_countries, if: -> { params[:step] == "details" }
+    before_action :load_order, :associate_user, :load_saved_addresses, :load_saved_credit_cards
+    before_action :load_shipping_methods, if: -> { params[:step] == "details" }
 
     before_action :ensure_order_not_completed
     before_action :ensure_checkout_allowed
     before_action :handle_insufficient_stock
     before_action :check_authorization
-    before_action :enable_embedded_shopfront
   end
 
   private
@@ -41,17 +40,13 @@ module CheckoutCallbacks
     @order.ship_address ||= finder.ship_address
   end
 
-  def load_shipping_methods
-    @shipping_methods = Spree::ShippingMethod.for_distributor(@order.distributor).order(:name)
+  def load_saved_credit_cards
+    @saved_credit_cards = spree_current_user&.credit_cards&.with_payment_profile.to_a
+    @selected_card = nil
   end
 
-  def load_countries
-    @countries = available_countries.map { |c| [c.name, c.id] }
-    @countries_with_states = available_countries.map { |c|
-      [c.id, c.states.map { |s|
-               [s.name, s.id]
-             }]
-    }
+  def load_shipping_methods
+    @shipping_methods = Spree::ShippingMethod.for_distributor(@order.distributor).order(:name)
   end
 
   def redirect_to_shop?

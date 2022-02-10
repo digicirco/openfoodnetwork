@@ -1,5 +1,4 @@
 #= require jquery2
-#= require jquery_ujs
 #= require jquery.ui.all
 #
 #= require angular
@@ -50,13 +49,15 @@
 #
 #= require modernizr
 #
+#= require foundation-sites/js/foundation.js
 #= require ./darkswarm
 #= require_tree ./mixins
 #= require_tree ./directives
 #= require_tree .
 
 document.addEventListener "turbo:load", ->
-  window.injector = angular.bootstrap document.body, ["Darkswarm"]
+  try
+    window.injector = angular.bootstrap document.body, ["Darkswarm"]
   true
 
 document.addEventListener "turbo:before-render", ->
